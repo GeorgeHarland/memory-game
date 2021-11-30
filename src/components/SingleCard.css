@@ -1,0 +1,27 @@
+.card {
+    position: relative;
+}
+.card img {
+    width: 100%;
+    display: block;
+    border: 2px solid #000;
+}
+
+/* Picture side of card - absolute position is to keep the imgs on each other */
+.card .picture {
+    transform: rotateY(90deg);
+    position: absolute;
+}
+.flipped .picture {
+    transform: rotateY(0deg);
+}
+
+/* Cover side of card. Back rotates first, then front rotates in after 0.2S */
+.card .cover {
+    transition: all ease-in 0.2s;
+    transition-delay: 0.2s;
+}
+.flipped .cover {
+    transform: rotateY(90deg);
+    transition-delay: 0s;
+}
