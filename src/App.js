@@ -23,7 +23,7 @@ function App() {
   const [turns, setTurns] = useState(0)
   const [firstChoice, setFirstChoice] = useState(null)
   const [secondChoice, setSecondChoice] = useState(null)
-  const [disabled, setDisabled] = false
+  const [disabled, setDisabled] = useState(false)
 
   // Function inside component
   // Shuffle cards (12 total), randomize, assign id to each (key for react)
@@ -35,6 +35,8 @@ function App() {
       // ^ Still the same line. When negative, will remain same order, when positive will switch (ends with shuffle)
       // ^ Fire function for each element in array
 
+    setFirstChoice(null)
+    setSecondChoice(null)
     setCards(readyCards)
     setTurns(0)
   }
@@ -48,8 +50,8 @@ function App() {
 
   // Compare the selected cards
   useEffect(() => {
-    setDisabled=(true)
     if (firstChoice && secondChoice) {
+      setDisabled(true)
       if (firstChoice.src === secondChoice.src) {
         setCards(prevCards => {
           // Map to new array with all the map except the choices 'matched' are true
@@ -65,7 +67,7 @@ function App() {
         nextTurn()
       } else {
         console.log("cards don't match")
-        setTimeout(() => nextTurn(), 750)
+        setTimeout(() => nextTurn(), 900)
       }
     }
   }, [firstChoice,secondChoice])
@@ -73,12 +75,18 @@ function App() {
   
   console.log(cards)
 
-  // Reset choices and increase turn
+  // Reset choices and increase turn number
   const nextTurn = () => {
     setFirstChoice(null)
     setSecondChoice(null)
     setTurns(prevTurns => prevTurns + 1)
+    setDisabled(false) 
   }
+
+  // Start new game
+  useEffect(() => {
+    createCards()
+  },[])
 
   return (
     <div className="App">
@@ -92,10 +100,11 @@ function App() {
             card={card}
             handleChoice={handleChoice}
             flipped={card === firstChoice || card === secondChoice || card.matched}
-            disabled={}
+            disabled={disabled}
           />
         ))}
       </div>
+      <p>Turns taken: {turns}</p>
     </div>
   );
 }
